@@ -6,4 +6,4 @@ Requires python version >= 3.5
 
 # Usage (will improve)
 
-> python farm.py --add example.py --source amqp://guest:guest@localhost:5672 --queue experiment
+> python kombu-farm.py --add example.py --source amqp://guest:guest@localhost:5672 --queue experiment
