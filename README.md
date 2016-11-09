@@ -2,7 +2,7 @@
 
 Python utility that helps you to quickly spawn kombu consumers as harvesters
 
-Requires python version >= 3.5.x
+Requires python version >= 3.5
 
 # Usage (will improve)
 
