@@ -8,8 +8,6 @@ LOG_FORMAT = ('%(levelname) -10s %(asctime)s %(name) -30s %(funcName) '
               '-35s %(lineno) -5d: %(message)s')
 LOGGER = logging.getLogger(__name__)
 
-task_queues = [Queue('experiment', exchange='', routing_key='experiment')]
-
 class Harvester(ConsumerMixin, metaclass=abc.ABCMeta):
     """
     Base harvester class that specific harvester instances must extend
@@ -17,9 +15,14 @@ class Harvester(ConsumerMixin, metaclass=abc.ABCMeta):
     """
     def __init__(self, source, queue, exchange='', routing_key=''):
         self.connection = Connection(source)
+        self.queue = queue
+        self.exchange = exchange
+        self.routing_key = routing_key
 
     def get_consumers(self, Consumer, channel):
-        return [Consumer(queues=task_queues, accept=['json', 'pickle', 'msgpack', 'yaml'], callbacks=[self.task])]
+        return [Consumer(
+            queues=[Queue(self.queue, exchange=self.exchange, routing_key=self.routing_key)],
+            accept=['json', 'pickle', 'msgpack', 'yaml'], callbacks=[self.task])]
 
     def task(self, body, message):
         """
